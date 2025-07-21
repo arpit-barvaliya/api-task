@@ -166,4 +166,14 @@ class BlogController extends Controller
             'likes_count' => $blog->likes()->count(),   
         ]);
     }       
+
+    public function latest()
+    {
+        $blog = Blog::latest()->first();
+        if ($blog) {
+            return response()->json($blog);
+        } else {
+            return response()->json(['message' => 'No blog found'], 404);
+        }
+    }
 }
