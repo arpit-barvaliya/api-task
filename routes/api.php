@@ -9,7 +9,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 // Blog routes
-Route::middleware('auth:sanctum')->group(function () {
+ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/blogs', [BlogController::class, 'store']);
     Route::get('/blogs', [BlogController::class, 'index']);
     Route::post('/blogs/{id}', [BlogController::class, 'update']);
