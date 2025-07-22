@@ -18,7 +18,6 @@ Route::post('/register', [AuthController::class, 'register']);
 
     // like and unlike blog
     Route::post('/blogs/{id}/like', [BlogController::class, 'like']);
-    Route::post('/blogs/{id}/unlike', [BlogController::class, 'unlike']);
 
     // get latest blog
     Route::get('/blogs/latest', [BlogController::class, 'latest']);

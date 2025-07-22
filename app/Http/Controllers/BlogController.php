@@ -147,25 +147,7 @@ class BlogController extends Controller
             'message' => 'Blog liked successfully',
             'likes_count' => $blog->likes()->count(),
         ]);
-    }
-
-    // BLOG-UNLIKE-TOGGLE
-    public function unlike($id)
-    {
-        $blog = Blog::findOrFail($id);
-        $user = Auth::user();
-
-        $like = $blog->likes()->where('user_id', $user->id)->first();
-        if ($like) {
-            $like->delete();
-            $liked = false;
-        }
-
-        return response()->json([
-            'message' => 'Blog unliked successfully',
-            'likes_count' => $blog->likes()->count(),   
-        ]);
-    }       
+    }    
 
     public function latest()
     {
