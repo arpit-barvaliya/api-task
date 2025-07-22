@@ -16,14 +16,14 @@ Route::post('/register', [AuthController::class, 'register']);
     Route::post('/blogs/{id}', [BlogController::class, 'update']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
 
-    // like and unlike
+    // like and unlike blog
     Route::post('/blogs/{id}/like', [BlogController::class, 'like']);
     Route::post('/blogs/{id}/unlike', [BlogController::class, 'unlike']);
+
+    // get latest blog
+    Route::get('/blogs/latest', [BlogController::class, 'latest']);
 }); 
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-
-
-Route::get('blogs/latest', [BlogController::class, 'latest']); 
