@@ -50,13 +50,22 @@ class BlogController extends Controller
     // BLOG-LIST-API
     public function index(Request $request)
     {
-        $query = Blog::withCount('likes')->with('user');
+        $user = Auth::user();
+        $query = Blog::withCount('likes')
+            ->with('user')
+            ->withExists(['likes as is_liked_by_user' => function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            }]);
 
         // Search
         if ($search = $request->input('search')) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%$search%")
-                  ->orWhere('description', 'like', "%$search%");
+                  ->orWhere('description', 'like', "%$search%")
+                  ->orWhereHas('user', function($q) use ($search) {
+                    $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+                  });
             });
         }
 
@@ -72,11 +81,11 @@ class BlogController extends Controller
         $blogs = $query->paginate($request->input('per_page') ?? 10);
 
         // Add info: is_liked_by_user
-        $user = Auth::user();
-        $blogs->getCollection()->transform(function($blog) use ($user) {
-            $blog->is_liked_by_user = $blog->likes()->where('user_id', $user->id)->exists();
-            return $blog;
-        });
+        // $user = Auth::user();
+        // $blogs->getCollection()->transform(function($blog) use ($user) {
+        //     $blog->is_liked_by_user = $blog->likes()->where('user_id', $user->id)->exists();
+        //     return $blog;
+        // });
 
         return response()->json($blogs);
     }
